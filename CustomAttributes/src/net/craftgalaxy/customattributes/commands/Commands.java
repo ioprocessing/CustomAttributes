@@ -30,9 +30,14 @@ public class Commands implements CommandExecutor {
 		if (cmd.getName().equalsIgnoreCase("customattributesadmin")) {
 			if (args.length == 1)  {
 				if (args[0].equalsIgnoreCase("reload")) {
+					if (sender.hasPermission("customattributesadmin.reload")){
 					plugin.reloadConfig();
 					sender.sendMessage(Utils.chat("&aCustomAttributes config has been reloaded."));
 					return true;
+				} else {
+					sender.sendMessage(Utils.chat("&cYou don't have permission to use this command!"));
+					return true;
+				}
 				}
 			} else {
 				sender.sendMessage(Utils.chat("&cIncorrect amount of arguments."));
@@ -87,8 +92,10 @@ public class Commands implements CommandExecutor {
 									return true;
 									
 								}
+							} else {
+								p.sendMessage(Utils.chat("&cYou don't have permission to use this command!"));
+								return true;
 							}
-							
 						default:
 							p.sendMessage(Utils.chat("&cYour command was not recognized."));	
 							return false;	
@@ -121,6 +128,9 @@ public class Commands implements CommandExecutor {
 									p.sendMessage(Utils.chat("&cThis item is not a block!"));
 									return true;
 								}
+							} else {
+								p.sendMessage(Utils.chat("&cYou don't have permission to use this command!"));
+								return true;
 							}
 						default:
 							p.sendMessage(Utils.chat("&cYour command was not recognized."));	

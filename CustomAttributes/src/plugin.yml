@@ -17,3 +17,6 @@ permissions:
   customattributes.unplaceable:
     description: Allows access to adding/removing the unplaceable tag
     default: op
+  customattributesadmin.reload:
+    description: Allows access to reloading the config.yml of the plugin
+    default: op
