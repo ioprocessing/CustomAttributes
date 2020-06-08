@@ -1,0 +1,4 @@
+unplaceable_message:
+  enabled: true
+  message: '&cYou can''t place that block.'
+# This is the message sent to the player upon trying to place an unplaceable block

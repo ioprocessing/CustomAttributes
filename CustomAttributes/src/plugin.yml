@@ -1,0 +1,19 @@
+name: CustomAttributes
+version: 1.0.0
+main: net.craftgalaxy.customattributes.Main
+description: Use commands to edit special attributes of items
+author: ioprocessing
+
+commands:
+  customattributes:
+    description: The main command to add/remove custom attributes
+    aliases: [ca, a, attribute]
+    usage: /ca <add/remove> <attribute name>
+  customattributesadmin:
+    description: The main command for CustomAttributes admin actions
+    aliases: caa
+    usage: /caa <action>
+permissions:
+  customattributes.unplaceable:
+    description: Allows access to adding/removing the unplaceable tag
+    default: op
