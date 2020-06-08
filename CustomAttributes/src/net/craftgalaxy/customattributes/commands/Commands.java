@@ -23,21 +23,24 @@ public class Commands implements CommandExecutor {
 		plugin.getCommand("customattributesadmin").setExecutor(this);
 	}
 
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) { 
 		
-		if (cmd.getName().equalsIgnoreCase("customattributesadmin") && args.length == 1) {
-			if (args[0].equalsIgnoreCase("reload")) {
-				plugin.reloadConfig();
-				if (!(sender instanceof Player)) {
-					sender.sendMessage("CustomAttributes config has been reloaded.");
+	    int length = args.length;
+		
+		if (cmd.getName().equalsIgnoreCase("customattributesadmin")) {
+			if (args.length == 1)  {
+				if (args[0].equalsIgnoreCase("reload")) {
+					plugin.reloadConfig();
+					sender.sendMessage(Utils.chat("&aCustomAttributes config has been reloaded."));
+					return true;
 				}
-				else {
-					Player p = (Player) sender;
-					p.sendMessage(Utils.chat("&aCustomAttributes config has been reloaded."));
-				}
-				return true;
+			} else {
+				sender.sendMessage(Utils.chat("&cIncorrect amount of arguments."));
+				return false;
 			}
 		}
+		
+		if(cmd.getName().equalsIgnoreCase("customattributes")) {
 		
 		if (!(sender instanceof Player)) {
 			sender.sendMessage("Only players can use this command!");
@@ -46,12 +49,14 @@ public class Commands implements CommandExecutor {
 		
 		else {
 			Player p = (Player) sender;
-			ItemStack heldMain = p.getInventory().getItemInMainHand();
-			ItemMeta itemmeta = heldMain.getItemMeta();
-		    int length = args.length;
-			PersistentDataContainer container = itemmeta.getPersistentDataContainer();
-	
-			if(cmd.getName().equalsIgnoreCase("customattributes") && length == 2) {
+			
+			if(!(p.getInventory().getItemInMainHand().getType().isAir())) {
+				
+				ItemStack heldMain = p.getInventory().getItemInMainHand();
+				ItemMeta itemmeta = heldMain.getItemMeta();
+				PersistentDataContainer container = itemmeta.getPersistentDataContainer();
+			
+			if(length == 2) {
 
 				String subcommand1 = args[0].toLowerCase();
 				String subcommand2 = args[1].toLowerCase();
@@ -68,25 +73,25 @@ public class Commands implements CommandExecutor {
 										p.sendMessage(Utils.chat("&6Added attribute: unplaceable."));
 										itemmeta.getPersistentDataContainer().set(NamespacedKey.minecraft("ca-unplaceable"), PersistentDataType.STRING, "protected");
 										heldMain.setItemMeta(itemmeta);
-										break;
+										return true;
 										
 									}
 									else {
 										p.sendMessage(Utils.chat("&cThis item already has that attribute!"));
-										break;
+										return true;
 										
 									}
 									
 								} else {
 									p.sendMessage(Utils.chat("&cThis item is not a block!"));
-									break;
+									return true;
 									
 								}
 							}
 							
 						default:
-							p.sendMessage(Utils.chat("&cYour command was not recognized (arg 2)."));	
-							break;	
+							p.sendMessage(Utils.chat("&cYour command was not recognized."));	
+							return false;	
 							
 						}
 					}
@@ -102,24 +107,24 @@ public class Commands implements CommandExecutor {
 										p.sendMessage(Utils.chat("&6Removed attribute: unplaceable."));
 										itemmeta.getPersistentDataContainer().remove(NamespacedKey.minecraft("ca-unplaceable"));
 										heldMain.setItemMeta(itemmeta);
-										break;
+										return true;
 										
 									}
 									else {
 										p.sendMessage(Utils.chat("&cThis item doesn't have that attribute!"));
-										break;
+										return true;
 										
 									}
 									
 								} 
 								else {
 									p.sendMessage(Utils.chat("&cThis item is not a block!"));
-									break;
+									return true;
 								}
 							}
 						default:
-							p.sendMessage(Utils.chat("&cYour command was not recognized (arg 2)."));	
-							break;	
+							p.sendMessage(Utils.chat("&cYour command was not recognized."));	
+							return false;	
 							
 						}
 					}
@@ -127,17 +132,22 @@ public class Commands implements CommandExecutor {
 				}
 				else {
 					p.sendMessage(Utils.chat("&cArgument not recognized."));
+					
+					return false;
 				}
-			return false;
 		
 		}
 			else {
 				p.sendMessage(Utils.chat("&cIncorrect amount of arguments."));	
 				
 				return false;
-			
 			}
-
+			} else {
+			sender.sendMessage(Utils.chat("&cYou must have an item in your hand to perform this command!"));
+			return true;
+			}
 		}
+		}
+		return true;
 	}
 }
