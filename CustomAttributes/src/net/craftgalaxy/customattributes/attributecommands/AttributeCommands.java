@@ -1,9 +1,10 @@
-package net.craftgalaxy.customattributes.commands;
+package net.craftgalaxy.customattributes.attributecommands;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -13,37 +14,18 @@ import org.bukkit.persistence.PersistentDataType;
 import net.craftgalaxy.customattributes.Main;
 import net.craftgalaxy.customattributes.utils.Utils;
 
-public class Commands implements CommandExecutor {
+public class AttributeCommands implements CommandExecutor {
 	
 	private Main plugin;
 	
-	public Commands(Main plugin) {
+	public AttributeCommands(Main plugin) {
 		this.plugin = plugin;
 		plugin.getCommand("customattributes").setExecutor(this);
-		plugin.getCommand("customattributesadmin").setExecutor(this);
 	}
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) { 
 		
 	    int length = args.length;
-		
-		if (cmd.getName().equalsIgnoreCase("customattributesadmin")) {
-			if (args.length == 1)  {
-				if (args[0].equalsIgnoreCase("reload")) {
-					if (sender.hasPermission("customattributesadmin.reload")){
-					plugin.reloadConfig();
-					sender.sendMessage(Utils.chat("&aCustomAttributes config has been reloaded."));
-					return true;
-				} else {
-					sender.sendMessage(Utils.chat("&cYou don't have permission to use this command!"));
-					return true;
-				}
-				}
-			} else {
-				sender.sendMessage(Utils.chat("&cIncorrect amount of arguments."));
-				return false;
-			}
-		}
 		
 		if(cmd.getName().equalsIgnoreCase("customattributes")) {
 		
@@ -75,7 +57,7 @@ public class Commands implements CommandExecutor {
 							if (p.hasPermission("customattributes.unplaceable")) {
 								if(heldMain.getType().isBlock()) {
 									if(!(container.has(NamespacedKey.minecraft("ca-unplaceable"), PersistentDataType.STRING))) {
-										p.sendMessage(Utils.chat("&6Added attribute: unplaceable."));
+										p.sendMessage(Utils.chat("&aAdded attribute: unplaceable."));
 										itemmeta.getPersistentDataContainer().set(NamespacedKey.minecraft("ca-unplaceable"), PersistentDataType.STRING, "protected");
 										heldMain.setItemMeta(itemmeta);
 										return true;
@@ -96,6 +78,50 @@ public class Commands implements CommandExecutor {
 								p.sendMessage(Utils.chat("&cYou don't have permission to use this command!"));
 								return true;
 							}
+						case "unenchantable":
+							if (p.hasPermission("customattributes.unenchantable")) {
+								if(Enchantment.DURABILITY.canEnchantItem(heldMain)) {
+									if(!(container.has(NamespacedKey.minecraft("ca-unenchantable"), PersistentDataType.STRING))) {
+										p.sendMessage(Utils.chat("&aAdded attribute: unenchantable."));
+										itemmeta.getPersistentDataContainer().set(NamespacedKey.minecraft("ca-unenchantable"), PersistentDataType.STRING, "cantenchant");
+										heldMain.setItemMeta(itemmeta);
+										return true;
+										
+									}
+									else {
+										p.sendMessage(Utils.chat("&cThis item already has that attribute!"));
+										return true;
+										
+									}
+									
+								} else {
+									p.sendMessage(Utils.chat("&cThis item can't be put in an enchanting table!"));
+									return true;
+									
+								}
+							} else {
+								p.sendMessage(Utils.chat("&cYou don't have permission to use this command!"));
+								return true;
+							}
+						case "unforgeable":
+							if (p.hasPermission("customattributes.unforgeable")) {
+									if(!(container.has(NamespacedKey.minecraft("ca-unforgeable"), PersistentDataType.STRING))) {
+										p.sendMessage(Utils.chat("&aAdded attribute: unforgeable."));
+										itemmeta.getPersistentDataContainer().set(NamespacedKey.minecraft("ca-unforgeable"), PersistentDataType.STRING, "cantforge");
+										heldMain.setItemMeta(itemmeta);
+										return true;
+										
+									}
+									else {
+										p.sendMessage(Utils.chat("&cThis item already has that attribute!"));
+										return true;
+										
+									}
+									
+							} else {
+								p.sendMessage(Utils.chat("&cYou don't have permission to use this command!"));
+								return true;
+							}
 						default:
 							p.sendMessage(Utils.chat("&cYour command was not recognized."));	
 							return false;	
@@ -109,9 +135,8 @@ public class Commands implements CommandExecutor {
 						
 						case "unplaceable":
 							if (p.hasPermission("customattributes.unplaceable")) {
-								if(heldMain.getType().isBlock()) {
 									if(container.has(NamespacedKey.minecraft("ca-unplaceable"), PersistentDataType.STRING)) {
-										p.sendMessage(Utils.chat("&6Removed attribute: unplaceable."));
+										p.sendMessage(Utils.chat("&aRemoved attribute: unplaceable."));
 										itemmeta.getPersistentDataContainer().remove(NamespacedKey.minecraft("ca-unplaceable"));
 										heldMain.setItemMeta(itemmeta);
 										return true;
@@ -123,11 +148,44 @@ public class Commands implements CommandExecutor {
 										
 									}
 									
-								} 
-								else {
-									p.sendMessage(Utils.chat("&cThis item is not a block!"));
-									return true;
-								}
+							} else {
+								p.sendMessage(Utils.chat("&cYou don't have permission to use this command!"));
+								return true;
+							}
+						case "unenchantable":
+							if (p.hasPermission("customattributes.unenchantable")) {
+									if(container.has(NamespacedKey.minecraft("ca-unenchantable"), PersistentDataType.STRING)) {
+										p.sendMessage(Utils.chat("&aRemoved attribute: unenchantable."));
+										itemmeta.getPersistentDataContainer().remove(NamespacedKey.minecraft("ca-unenchantable"));
+										heldMain.setItemMeta(itemmeta);
+										return true;
+										
+									}
+									else {
+										p.sendMessage(Utils.chat("&cThis item doesn't have that attribute!"));
+										return true;
+										
+									}
+									
+							} else {
+								p.sendMessage(Utils.chat("&cYou don't have permission to use this command!"));
+								return true;
+							}
+						case "unforgeable":
+							if (p.hasPermission("customattributes.unforgeable")) {
+									if(container.has(NamespacedKey.minecraft("ca-unforgeable"), PersistentDataType.STRING)) {
+										p.sendMessage(Utils.chat("&aRemoved attribute: unforgeable."));
+										itemmeta.getPersistentDataContainer().remove(NamespacedKey.minecraft("ca-unforgeable"));
+										heldMain.setItemMeta(itemmeta);
+										return true;
+										
+									}
+									else {
+										p.sendMessage(Utils.chat("&cThis item doesn't have that attribute!"));
+										return true;
+										
+									}
+									
 							} else {
 								p.sendMessage(Utils.chat("&cYou don't have permission to use this command!"));
 								return true;
@@ -141,7 +199,7 @@ public class Commands implements CommandExecutor {
 					
 				}
 				else {
-					p.sendMessage(Utils.chat("&cArgument not recognized."));
+					p.sendMessage(Utils.chat("&cYour command was not recognized."));
 					
 					return false;
 				}

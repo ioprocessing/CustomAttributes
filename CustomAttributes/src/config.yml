@@ -2,3 +2,11 @@ unplaceable_message:
   enabled: true
   message: '&cYou can''t place that block.'
 # This is the message sent to the player upon trying to place an unplaceable block
+unenchantable_message:
+  enabled: true
+  message: '&cYou can''t enchant that item.'
+  # This is the message sent to the player upon trying to enchant an unenchantable item
+unforgeable_message:
+  enabled: true
+  message: '&cYou can''t use this item in an anvil.'
+  # This is the message sent to the player upon trying to use an unforgeable item in an anvil

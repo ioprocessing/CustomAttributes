@@ -1,22 +1,31 @@
 name: CustomAttributes
-version: 1.0.0
+version: 1.1.0
 main: net.craftgalaxy.customattributes.Main
 description: Use commands to edit special attributes of items
 author: ioprocessing
 
 commands:
   customattributes:
-    description: The main command to add/remove custom attributes
+    description: Add/remove custom attributes
     aliases: [ca, a, attribute]
     usage: /ca <add/remove> <attribute name>
   customattributesadmin:
-    description: The main command for CustomAttributes admin actions
+    description: CustomAttributes admin actions
     aliases: caa
     usage: /caa <action>
 permissions:
   customattributes.unplaceable:
     description: Allows access to adding/removing the unplaceable tag
     default: op
+  customattributes.unenchantable:
+    description: Allows access to adding/removing the unenchantable tag
+    default: op
+  customattributes.unforgeable:
+    description: Allows access to adding/removing the unforgeable tag
+    default: op
+  customattributesadmin.help:
+    description: Allows access to /caa help
+    default: op
   customattributesadmin.reload:
-    description: Allows access to reloading the config.yml of the plugin
+    description: Allows access to /caa reload
     default: op

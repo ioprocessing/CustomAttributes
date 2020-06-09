@@ -27,7 +27,7 @@ public class BlockPlace_Listener implements Listener {
 		String enabled = plugin.getConfig().getString("unplaceable_message.enabled");
 		PersistentDataContainer container = e.getItemInHand().getItemMeta().getPersistentDataContainer();
 		if(container.has(NamespacedKey.minecraft("ca-unplaceable"), PersistentDataType.STRING)) {
-			e.setCancelled(true);
+		e.setCancelled(true);
 			if(enabled.equalsIgnoreCase("true")) {
 			p.sendMessage(Utils.chat(plugin.getConfig().getString("unplaceable_message.message")));
 			}
